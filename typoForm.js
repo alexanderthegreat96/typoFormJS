@@ -19,29 +19,30 @@ $(".typoControl").on('keyup change', function (){
     }
 
     checkFields();
+
 });
-
-
 
 function highlightError(errorMsg,i)
 {
-    var current_element = $(".typoControl").eq(i);
-    if(current_element.hasClass("invalid"))
-    {
-        $(".errorMsg").eq(i).html(errorMsg);
-
-        if(consoleDebug)
+    //$(".typoControl").each(function(i,obj){
+    var current = $(".typoControl").eq(i);
+        if(current.hasClass("invalid"))
         {
-            console.log("showcase error for .typoControl_"+i);
-        }
-        return false;
-    }
-    else
-    {
-        removeError(i);
-        return true;
-    }
+            $(".errorMsg").eq(i).html(errorMsg);
 
+            if(consoleDebug)
+            {
+                console.log("showcase error for .typoControl_"+i);
+            }
+            console.log("stop");
+            return false;
+        }
+        else
+        {
+            removeError(i);
+            return true;
+        }
+  //  });
 }
 
 function applyInvalid(i)
@@ -289,12 +290,14 @@ function checkFields()
                             applyInvalid(i);
                             highlightError(applyLengthError(i,$(this).attr("data-length"),lang),i);
                             output = "invalid";
+                            return false;
                         }
                         else
                         {
                             applyValid(i);
                             removeError(i);
                             output  = "valid";
+                            return true;
                         }
                     }
                     else
@@ -304,12 +307,14 @@ function checkFields()
                             applyValid(i);
                             removeError(i);
                             output = "valid";
+                            return true;
                         }
                         else
                         {
                             applyInvalid(i);
                             highlightError(applyTextError(i,lang),i);
                             output = "invalid";
+                            return false;
                         }
                     }
                 }
@@ -322,6 +327,7 @@ function checkFields()
                             applyInvalid(i);
                             highlightError(applyLengthError(i,$(this).attr("data-length"),lang),i);
                             output = "invalid";
+                            return false;
 
                         }
                         else
@@ -332,12 +338,14 @@ function checkFields()
                                 applyValid(i);
                                 removeError(i);
                                 output = "valid";
+                                return true;
                             }
                             else
                             {
                                 applyInvalid(i);
                                 highlightError(applyEmailError(i,lang),i);
                                 output = "invalid";
+                                return false;
                             }
                         }
                     }
@@ -348,12 +356,14 @@ function checkFields()
                             applyValid(i);
                             removeError(i);
                             output = "valid";
+                            return true;
                         }
                         else
                         {
                             applyInvalid(i);
                             highlightError(applyTextError(i,lang),i);
                             output = "invalid";
+                            return false;
                         }
                     }
                 }
@@ -366,12 +376,14 @@ function checkFields()
                             applyInvalid(i);
                             highlightError(applyLengthError(i,$(this).attr("data-length"),lang),i);
                             output = "invalid";
+                            return false;
                         }
                         else
                         {
                             applyValid(i);
                             removeError(i);
                             output =  "valid";
+                            return true;
                         }
                     }
                     else
@@ -381,12 +393,14 @@ function checkFields()
                             applyValid(i);
                             removeError(i);
                             output = "valid";
+                            return true;
                         }
                         else
                         {
                             applyInvalid(i);
                             highlightError(applyTextError(i,lang),i);
                             output = "invalid"
+                            return false;
                         }
                     }
                 }
@@ -396,7 +410,7 @@ function checkFields()
                 }
                 else
                 {
-                    return;
+
                 }
             }
             else if($(this).is("textarea"))
@@ -408,12 +422,14 @@ function checkFields()
                         applyInvalid(i);
                         highlightError(applyLengthError(i,$(this).attr("data-length"),lang),i);
                         output = "invalid";
+                        return false;
                     }
                     else
                     {
                         applyValid(i);
                         removeError(i);
                         output = "valid";
+                        return true;
                     }
                 }
                 else
@@ -423,12 +439,14 @@ function checkFields()
                         applyValid(i);
                         removeError(i);
                         output = "valid";
+                        return true;
                     }
                     else
                     {
                         applyInvalid(i);
                         highlightError(applyTextError(i,lang),i);
                         output = "invalid";
+                        return false;
                     }
                 }
 
@@ -440,17 +458,19 @@ function checkFields()
                     applyInvalid(i);
                     highlightError(applySelectError(i,lang),i);
                     output = "invalid";
+                    return false;
                 }
                 else
                 {
                     applyValid(i);
                     removeError(i);
                     output = "valid";
+                    return true;
                 }
             }
             else
             {
-                return null;
+                
             }
         }
 
