@@ -23,26 +23,25 @@ $(".typoControl").on('keyup change', function (){
 
 
 
-function highlightError(errorMsg)
+function highlightError(errorMsg,i)
 {
-    $('.typoControl').each(function(i, obj) {
-        if($(this).hasClass("invalid"))
-        {
-            $(".errorMsg").eq(i).html(errorMsg);
+    var current_element = $(".typoControl").eq(i);
+    if(current_element.hasClass("invalid"))
+    {
+        $(".errorMsg").eq(i).html(errorMsg);
 
-            if(consoleDebug)
-            {
-                console.log("showcase error for .typoControl_"+i);
-            }
-
-            return false;
-        }
-        else
+        if(consoleDebug)
         {
-            $(".errorMsg").eq(i).html("");
-            return true;
+            console.log("showcase error for .typoControl_"+i);
         }
-    });
+        return false;
+    }
+    else
+    {
+        removeError(i);
+        return true;
+    }
+
 }
 
 function applyInvalid(i)
@@ -288,7 +287,7 @@ function checkFields()
                         if($(this).val().length < $(this).attr("data-length"))
                         {
                             applyInvalid(i);
-                            highlightError(applyLengthError(i,$(this).attr("data-length"),lang));
+                            highlightError(applyLengthError(i,$(this).attr("data-length"),lang),i);
                             output = "invalid";
                         }
                         else
@@ -309,7 +308,7 @@ function checkFields()
                         else
                         {
                             applyInvalid(i);
-                            highlightError(applyTextError(i,lang))(i,lang);
+                            highlightError(applyTextError(i,lang),i);
                             output = "invalid";
                         }
                     }
@@ -321,7 +320,7 @@ function checkFields()
                         if($(this).val().length < $(this).attr("data-length"))
                         {
                             applyInvalid(i);
-                            highlightError(applyLengthError(i,$(this).attr("data-length"),lang));
+                            highlightError(applyLengthError(i,$(this).attr("data-length"),lang),i);
                             output = "invalid";
 
                         }
@@ -337,7 +336,7 @@ function checkFields()
                             else
                             {
                                 applyInvalid(i);
-                                highlightError(applyEmailError(i,lang));
+                                highlightError(applyEmailError(i,lang),i);
                                 output = "invalid";
                             }
                         }
@@ -353,7 +352,7 @@ function checkFields()
                         else
                         {
                             applyInvalid(i);
-                            highlightError(applyTextError(i,lang))(i,lang);
+                            highlightError(applyTextError(i,lang),i);
                             output = "invalid";
                         }
                     }
@@ -365,7 +364,7 @@ function checkFields()
                         if($(this).val().length < $(this).attr("data-length"))
                         {
                             applyInvalid(i);
-                            highlightError(applyLengthError(i,$(this).attr("data-length"),lang));
+                            highlightError(applyLengthError(i,$(this).attr("data-length"),lang),i);
                             output = "invalid";
                         }
                         else
@@ -386,7 +385,7 @@ function checkFields()
                         else
                         {
                             applyInvalid(i);
-                            highlightError(applyTextError(i,lang))(i,lang);
+                            highlightError(applyTextError(i,lang),i);
                             output = "invalid"
                         }
                     }
@@ -407,7 +406,7 @@ function checkFields()
                     if($(this).val().length < $(this).attr("data-length"))
                     {
                         applyInvalid(i);
-                        highlightError(applyLengthError(i,$(this).attr("data-length"),lang));
+                        highlightError(applyLengthError(i,$(this).attr("data-length"),lang),i);
                         output = "invalid";
                     }
                     else
@@ -428,7 +427,7 @@ function checkFields()
                     else
                     {
                         applyInvalid(i);
-                        highlightError(applyTextError(i,lang))(i,lang);
+                        highlightError(applyTextError(i,lang),i);
                         output = "invalid";
                     }
                 }
@@ -439,7 +438,7 @@ function checkFields()
                 if(!$(this).val())
                 {
                     applyInvalid(i);
-                    highlightError(applySelectError(i,lang));
+                    highlightError(applySelectError(i,lang),i);
                     output = "invalid";
                 }
                 else
@@ -451,7 +450,7 @@ function checkFields()
             }
             else
             {
-                return ;
+                return null;
             }
         }
 
