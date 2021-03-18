@@ -20,7 +20,10 @@ $(".typoControl").on('keyup change', function () {
     checkFields();
 
 });
-
+/**
+* Displays error for given 
+* object key
+*/
 function highlightError(errorMsg, i) {
     //$(".typoControl").each(function(i,obj){
     var current = $(".typoControl").eq(i);
@@ -197,7 +200,7 @@ function checkFields() {
         if ($(this).hasClass("typoIgnore")) {
             applyValid(i);
             output = "valid";
-            return false;
+            return true;
         } else {
             /**
              * Cheking if the input has a lang attribute
