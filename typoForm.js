@@ -9,9 +9,54 @@
  * Data attributes: data-lang , data-length
  */
 
+/**
+ * Enable debugging
+ * @type {boolean}
+ */
 var consoleDebug = true;
 
-$(".typoControl").on('keyup change', function () {
+/**
+ * Use normal or submit button
+ * @type {boolean}
+ */
+var useSubmit = false;
+
+/**
+ * Capture lang ISO
+ * from #langCode hidden input
+ * ex: <input type="hidden" id="langCode" value="{form.currentSiteLanguage.twoLetterIsoCode}">
+ * in templates/Extensions/Form/Form.html
+ * @type {boolean}
+ */
+
+var useLangId = false;
+
+
+if (consoleDebug) {
+    console.log("typoFormJS v1.0 Intiated...");
+
+}
+
+
+if (useLangId) {
+    $(".typoControl").attr("data-lang", $("#langCode").val());
+}
+
+if (useSubmit) {
+    console.log(".typoSubmit -> Using normal submit button and applying 'disabled'...");
+    $(".typoSubmit").prop("disabled", true);
+
+    $(".typoSubmit").click(function () {
+        if (checkFields() === "valid") {
+            console.log("Form ready!");
+        } else {
+            console.log("We have a form error");
+        }
+    });
+
+}
+
+$(".typoControl").on('keyup change selectmenuchange', function () {
 
     if (consoleDebug) {
         console.log("Listening to .typoControl changes...");
@@ -19,11 +64,27 @@ $(".typoControl").on('keyup change', function () {
 
     checkFields();
 
+    if (useSubmit) {
+        if (checkFields() === "invalid") {
+            $(".typoSubmit").prop("disabled", "true");
+            if (consoleDebug) {
+                console.log("Disabled the submit button!");
+            }
+        } else {
+            $(".typoSubmit").removeAttr("disabled", true);
+            if (consoleDebug) {
+                console.log("Enabled the submit button!");
+            }
+        }
+    }
+
+
 });
+
 /**
-* Displays error for given 
-* object key
-*/
+ * Displays error for given
+ * object key
+ */
 function highlightError(errorMsg, i) {
     //$(".typoControl").each(function(i,obj){
     var current = $(".typoControl").eq(i);
@@ -171,6 +232,58 @@ function applySelectError(i, lang = "en") {
 }
 
 /**
+ * Applies checkbox Error
+ */
+
+function applyCheckboxError(i, lang = "en") {
+
+    var errorMsg = null;
+    if (lang === "en") {
+        errorMsg = "You must tick this option! ";
+    } else if (lang === "de") {
+        errorMsg = "Sie müssen diese Option ankreuzen!";
+    } else if (lang === "it") {
+        errorMsg = "Devi spuntare questa opzione !";
+    } else if (lang === "fr") {
+        errorMsg = "Vous devez cocher cette option !";
+    } else {
+        errorMsg = "You must tick this option!";
+    }
+
+    //$(".errorMsg").eq(i).html(errorMsg);
+
+    if (consoleDebug) {
+        console.log("Applied a selector error for .typoControl_" + i);
+    }
+
+    return errorMsg;
+}
+
+function applyTelError(i, lang = "en") {
+
+    var errorMsg = null;
+    if (lang === "en") {
+        errorMsg = "Only numeric characters allowed !";
+    } else if (lang === "de") {
+        errorMsg = "Nur numerische Zeichen erlaubt !";
+    } else if (lang === "it") {
+        errorMsg = "Sono consentiti solo caratteri numerici !";
+    } else if (lang === "fr") {
+        errorMsg = "Seuls les caractères numériques sont autorisés. !";
+    } else {
+        errorMsg = "Only numeric characters allowed.";
+    }
+
+    //$(".errorMsg").eq(i).html(errorMsg);
+
+    if (consoleDebug) {
+        console.log("Applied a telephone error for .typoControl_" + i);
+    }
+
+    return errorMsg;
+}
+
+/**
  * Removes error for given object key
  *
  * */
@@ -241,6 +354,30 @@ function checkFields() {
                             return false;
                         }
                     }
+                } else if ($(this).attr("type") === "tel") {
+
+                    if ($.isNumeric($(this))) {
+
+                        if ($(this).length < 10) {
+                            applyInvalid(i);
+                            highlightError(applyLengthError(i, 10, lang), i);
+                            output = "invalid";
+                            return false;
+                        } else {
+                            applyValid(i);
+                            removeError(i);
+                            output = "valid";
+                            return true;
+                        }
+
+                    } else {
+                        applyInvalid(i);
+                        highlightError(applyTelError(i, lang), i);
+                        output = "invalid";
+                        return false;
+                    }
+
+
                 } else if ($(this).attr("type") === "email") {
                     if ($(this).attr("data-length")) {
                         if ($(this).val().length < $(this).attr("data-length")) {
@@ -303,6 +440,17 @@ function checkFields() {
                         }
                     }
                 } else if ($(this).attr("type") === "checkbox") {
+                    if ($(this).is(':checked')) {
+                        applyValid(i);
+                        removeError(i);
+                        output = "valid";
+                        return true;
+                    } else {
+                        applyInvalid(i);
+                        highlightError(applyCheckboxError(i, lang), i);
+                        output = "invalid"
+                        return false;
+                    }
 
                 } else {
 
@@ -353,19 +501,10 @@ function checkFields() {
 
     });
 
+
     return output;
 
 
 }
 
-/**
- * Listens to the submit action
- */
 
-$(".typoSubmit").click(function () {
-    if (checkFields() === "valid") {
-        console.log("Form ready!");
-    } else {
-        console.log("We have a form error");
-    }
-});
