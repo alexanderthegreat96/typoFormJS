@@ -9,28 +9,6 @@
  * Data attributes: data-lang , data-length
  */
 
-/**
- * Enable debugging
- * @type {boolean}
- */
-var consoleDebug = true;
-
-/**
- * Use normal or submit button
- * @type {boolean}
- */
-var useSubmit = false;
-
-/**
- * Capture lang ISO
- * from #langCode hidden input
- * ex: <input type="hidden" id="langCode" value="{form.currentSiteLanguage.twoLetterIsoCode}">
- * in templates/Extensions/Form/Form.html
- * @type {boolean}
- */
-
-var useLangId = false;
-
 
 if (consoleDebug) {
     console.log("typoFormJS v1.0 Intiated...");
@@ -56,7 +34,7 @@ if (useSubmit) {
 
 }
 
-$(".typoControl").on('keyup change selectmenuchange', function () {
+$(".typoControl").on('keyup change keypress blur input', function () {
 
     if (consoleDebug) {
         console.log("Listening to .typoControl changes...");
@@ -136,6 +114,9 @@ function applyTextError(i, lang) {
         errorMsg = "Devi digitare del testo.";
     } else if (lang === "fr") {
         errorMsg = "Vous devez taper du texte.";
+
+    } else if (lang === "ro") {
+        errorMsg = "Trebuie sa introduci text.";
     } else {
         errorMsg = "You must type in some text.";
     }
@@ -158,6 +139,8 @@ function applyLengthError(i, limit, lang = "en") {
 
     if (lang === "en") {
         errorMsg = "You must type at least <b>" + limit + "</b> characters.";
+    } else if (lang === "ro") {
+        errorMsg = "Trebuie sa introduci macar <b>" + limit + "</b> caractere";
     } else if (lang === "de") {
         errorMsg = "Sie müssen mindestens <b>" + limit + "</b> Zeichen eingeben";
     } else if (lang === "it") {
@@ -185,6 +168,8 @@ function applyEmailError(i, lang = "en") {
     var errorMsg = null;
     if (lang === "en") {
         errorMsg = "Your email address does not contain '@' !";
+    } else if (lang === "ro") {
+        errorMsg = "Adresa de email nu contine '@' !";
     } else if (lang === "de") {
         errorMsg = "Ihre E-Mail-Adresse enthält kein '@' !";
     } else if (lang === "it") {
@@ -212,6 +197,8 @@ function applySelectError(i, lang = "en") {
     var errorMsg = null;
     if (lang === "en") {
         errorMsg = "You must pick an item !";
+    } else if (lang === "ro") {
+        errorMsg = "Trebuie sa selectezi macar un item!";
     } else if (lang === "de") {
         errorMsg = "Sie müssen einen Artikel auswählen!";
     } else if (lang === "it") {
@@ -240,7 +227,9 @@ function applyCheckboxError(i, lang = "en") {
     var errorMsg = null;
     if (lang === "en") {
         errorMsg = "You must tick this option! ";
-    } else if (lang === "de") {
+    } else if (lang === "ro") {
+        errorMsg = "Trebuie sa bifezi macar o optiune! ";
+    }else if (lang === "de") {
         errorMsg = "Sie müssen diese Option ankreuzen!";
     } else if (lang === "it") {
         errorMsg = "Devi spuntare questa opzione !";
@@ -264,6 +253,8 @@ function applyTelError(i, lang = "en") {
     var errorMsg = null;
     if (lang === "en") {
         errorMsg = "Only numeric characters allowed !";
+    } else if (lang === "ro") {
+        errorMsg = "Doar caractere numerice acceptate !";
     } else if (lang === "de") {
         errorMsg = "Nur numerische Zeichen erlaubt !";
     } else if (lang === "it") {
