@@ -12,7 +12,6 @@
 
 if (consoleDebug) {
     console.log("typoFormJS v1.0 Intiated...");
-
 }
 
 
